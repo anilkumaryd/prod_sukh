@@ -361,6 +361,60 @@ def remove_from_cart_view(request, pk):
 
 
 
+
+
+
+# def update_cart_view(request, pid, op):
+ 
+#     if 'product_ids' in request.COOKIES:
+#         product_ids = request.COOKIES['product_ids']
+#         product_id_in_cart = product_ids.split('|')
+
+       
+#         product_count = product_id_in_cart.count(str(pid))
+
+       
+#         if op == 'inc':  
+#             product_id_in_cart.append(str(pid))
+#         elif op == 'dec':  
+#                 product_id_in_cart.remove(str(pid))
+        
+        
+#         product_id_in_cart = [product_id for product_id in product_id_in_cart if product_id != '']
+
+        
+#         product_id_in_cart = list(set(product_id_in_cart))
+
+     
+#         products = models.Product.objects.filter(id__in=product_id_in_cart)
+
+      
+#         total = sum(p.price for p in products)
+
+#         value = '|'.join(product_id_in_cart)
+#         response = render(request, 'ecom/cart.html', {
+#             'products': products,
+#             'total': total,
+#             'product_count_in_cart': len(product_id_in_cart)
+#         })
+
+#         if not value:
+#             response.delete_cookie('product_ids')
+#         else:
+#             response.set_cookie('product_ids', value)
+
+#         return response
+
+  
+#     return redirect('/')
+
+
+
+
+
+
+
+
 def send_feedback_view(request):
     feedbackForm=forms.FeedbackForm()
     if request.method == 'POST':
