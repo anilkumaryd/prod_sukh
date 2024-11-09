@@ -374,9 +374,7 @@ img {
 .slide-2 {
   background-image: url("{% static 'images/ecom-banner4.jpg' %}");
 }
-.slide-3 {
-  background-image: url("{% static 'images/ecom-banner1.png' %}");
-}
+
 .slide-4 {
   background-image: url("{% static 'images/ecom-banner3.jpg' %}");
 }
@@ -397,9 +395,6 @@ img {
       
       <input id="slide-dot-2" type="radio" name="slides">
         <div class="slide slide-2"></div>
-      
-      <input id="slide-dot-3" type="radio" name="slides">
-        <div class="slide slide-3"></div>
       <input id="slide-dot-4" type="radio" name="slides">
         <div class="slide slide-4"></div>
     </div>
@@ -459,23 +454,20 @@ img {
   {% endfor %}
 </div>
 <!-- products data enddddddddddddddddddddddddddddddddddddddddddddddddddddddddddd -->
-{%else%}
+{% else %}
 <h3 style="text-align:center; color:#3E454C;">No Search Found</h3>
-{%endif%}
+{% endif %}
 
 <script>
-    {%if messages %}
-    {%for message in messages%}
+    {% if messages %}
+    {% for message in messages %}
     alert('{{message}}');
-    {%endfor%}
-    {%endif%}
+    {% endfor %}
+    {% endif %}
 </script>
 <br><br><br>
 <br><br><br><br><br><br><br><br><br><br><br><br>
 
 
-<!--
-developed By : sumit kumar
--->
 
 {% endblock content %}

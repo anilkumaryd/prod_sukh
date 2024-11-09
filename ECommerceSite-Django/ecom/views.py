@@ -280,39 +280,85 @@ def cart_view(request):
     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
 
 
-def remove_from_cart_view(request,pk):
-    #for counter in cart
+# def remove_from_cart_view(request,pk):
+#     #for counter in cart
+#     if 'product_ids' in request.COOKIES:
+#         product_ids = request.COOKIES['product_ids']
+#         counter=product_ids.split('|')
+#         product_count_in_cart=len(set(counter))
+#     else:
+#         product_count_in_cart=0
+
+#     # removing product id from cookie
+#     total=0
+#     if 'product_ids' in request.COOKIES:
+#         product_ids = request.COOKIES['product_ids']
+#         product_id_in_cart=product_ids.split('|')
+#         product_id_in_cart=list(set(product_id_in_cart))
+#         product_id_in_cart.remove(str(pk))
+#         products=models.Product.objects.all().filter(id__in = product_id_in_cart)
+#         #for total price shown in cart after removing product
+#         for p in products:
+#             total=total+p.price
+
+#         #  for update coookie value after removing product id in cart
+#         value=""
+#         for i in range(len(product_id_in_cart)):
+#             if i==0:
+#                 value=value+product_id_in_cart[0]
+#             else:
+#                 value=value+"|"+product_id_in_cart[i]
+#         response = render(request, 'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
+#         if value=="":
+#             response.delete_cookie('product_ids')
+#         response.set_cookie('product_ids',value)
+#         return response
+
+
+
+def remove_from_cart_view(request, pk):
+    # Check for product IDs in cookies
     if 'product_ids' in request.COOKIES:
         product_ids = request.COOKIES['product_ids']
-        counter=product_ids.split('|')
-        product_count_in_cart=len(set(counter))
-    else:
-        product_count_in_cart=0
+        product_id_in_cart = product_ids.split('|')
+        product_id_in_cart = list(set(product_id_in_cart))
 
-    # removing product id from cookie
-    total=0
-    if 'product_ids' in request.COOKIES:
-        product_ids = request.COOKIES['product_ids']
-        product_id_in_cart=product_ids.split('|')
-        product_id_in_cart=list(set(product_id_in_cart))
-        product_id_in_cart.remove(str(pk))
-        products=models.Product.objects.all().filter(id__in = product_id_in_cart)
-        #for total price shown in cart after removing product
-        for p in products:
-            total=total+p.price
+        # Check if the product ID to remove is in the cart
+        if str(pk) in product_id_in_cart:
+            product_id_in_cart.remove(str(pk))
 
-        #  for update coookie value after removing product id in cart
-        value=""
-        for i in range(len(product_id_in_cart)):
-            if i==0:
-                value=value+product_id_in_cart[0]
-            else:
-                value=value+"|"+product_id_in_cart[i]
-        response = render(request, 'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
-        if value=="":
+        # Fetch products that are still in the cart
+        products = models.Product.objects.filter(id__in=product_id_in_cart)
+
+        # Calculate total price after removing the product
+        total = sum(p.price for p in products)
+
+        # Update the cookie value
+        value = '|'.join(product_id_in_cart)
+        response = render(request, 'ecom/cart.html', {
+            'products': products,
+            'total': total,
+            'product_count_in_cart': len(set(product_id_in_cart))
+        })
+        if not value:
             response.delete_cookie('product_ids')
-        response.set_cookie('product_ids',value)
+         
+        
+        else:
+            response.set_cookie('product_ids', value)
+           
+            
+
         return response
+    
+    # Handle the case where the cookie is not found
+    return redirect('/')
+    # return render(request, 'ecom/cart.html', {
+    #     'products': [],
+    #     'total': 0,
+    #     'product_count_in_cart': 0
+    # }) 
+
 
 
 def send_feedback_view(request):
@@ -544,6 +590,16 @@ def edit_profile_view(request):
 #---------------------------------------------------------------------------------
 def aboutus_view(request):
     return render(request,'ecom/aboutus.html')
+
+def policy_view(request):
+    return render(request,'ecom/policy.html')
+
+
+def contact(request):
+    return render(request,'ecom/contact.html')
+
+def terms(request):
+    return render(request,'ecom/terms.html')
 
 def contactus_view(request):
     sub = forms.ContactusForm()

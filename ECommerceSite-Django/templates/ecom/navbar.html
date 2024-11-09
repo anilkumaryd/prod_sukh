@@ -1,3 +1,4 @@
+{% load static %}
 <html>
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
@@ -13,7 +14,7 @@ body {
 }
 
 #navbar {
-    background-color: #3e454c;
+    background-color: green;
     color: black;
 }
 
@@ -202,13 +203,25 @@ body {
 
                 <li class="upper-links"><a class="links" href="/adminclick">Admin</a></li>
                 <li class="upper-links"><a class="links" href="/aboutus">About Us</a></li>
+                <li class="upper-links"><a class="links" href="/policy">Privacy policy</a></li>
+                <li class="upper-links"><a class="links" href="/contact">Contact</a></li>
+                <li class="upper-links"><a class="links" href="/terms">Terms</a></li>
                 
             </ul>
         </div>
         <div class="row row2">
+           
+
+
             <div class="col-sm-3">
-                <h2 style="margin:0px;"><a style="text-decoration:none; color:white;" href="/"><span class="largenav">Simple Ecommerce </span></a></h2>
+                <a style="text-decoration:none; color:white; display: inline-flex; align-items: center;" href="/">
+                    <img src="{% static 'images/logo.png' %}" style="width: 70px; margin-left: 1px;" alt="Logo">
+                    <h2 style="margin:10px;">
+                        <span class="largenav">Sukhianna | Navbar</span>
+                    </h2>
+                </a>
             </div>
+            
 
 
             <div class="navbar-search smallsearch col-sm-7 col-xs-11">

@@ -1,5 +1,6 @@
-<html>
 {% load static %}
+<html>
+
 <head>
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.0/css/bootstrap.min.css">
 <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
@@ -15,7 +16,7 @@ body {
 }
 
 #navbar {
-    background-color: #3e454c;
+    background-color: green;
     color: black;
 }
 
@@ -125,7 +126,7 @@ body {
     top: 100%;
     display: none;
     background-color: #fff;
-    color: #333;
+    color: #d60f0f;
     left: 0px;
     border: 0;
     border-radius: 0;
@@ -180,7 +181,7 @@ body {
         -----------------------------------------*/
         footer {
           padding: 0px 0px 0px 0px;
-          background-color: black;
+          background-color: white;
           margin: 0px;
         }
 
@@ -260,9 +261,18 @@ body {
             </ul>
         </div>
         <div class="row row2">
-            <div class="col-sm-3">
-                <h2 style="margin:0px;"><a style="text-decoration:none; color:white;" href="/"><span class="largenav">Simple Ecommerce </span></a></h2>
-            </div>
+
+
+          <div class="col-sm-3">
+            <a style="text-decoration:none; color:white; display: inline-flex; align-items: center;" href="/">
+                <img src="{% static 'images/logo.png' %}" style="width: 70px; margin-left: 1px;" alt="Logo">
+                <h2 style="margin:10px;">
+                    <span class="largenav">Sukhianna Customer </span>
+                </h2>
+            </a>
+        </div>
+
+            
 
             <div class="navbar-search smallsearch col-sm-7 col-xs-11">
               <form  action="/search" method="get">
@@ -303,10 +313,10 @@ body {
   <div class="container">
     <div class="row">
       <div class="col-md-12 col-sm-12">
-        <div style="color:#ffffff;" class="wow fadeInUp footer-copyright">
-          <p>Ecommerce Site in Python using Django Framework<br>
-            &copy; 2022 Developed By Sumit Kumar </p>
+        <div style="color:green;" class="wow fadeInUp footer-copyright">
+          <p>&copy; 2024 sukhianna.com. All rights reserved. All trademarks are the property of their respective owners.</p>
         </div>
+      </div>
       </div>
     </div>
   </div>

@@ -98,7 +98,10 @@
         </div>
 
         <div class="navbar-nav navbar-right">
-          <a href="/logout" class="nav-item nav-link"> Logout</a>
+          <form method="post" action="/logout" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="nav-item nav-link btn btn-link" style="padding: 0; color: #FFF; text-decoration: none;">Logout</button>
+          </form>
         </div>
 
       </div>
