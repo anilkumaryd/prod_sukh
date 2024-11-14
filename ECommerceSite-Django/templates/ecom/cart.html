@@ -64,9 +64,7 @@
 </style>
 
 </head>
-<!--
-written By : sumit kumar
--->
+
 <br><br><br><br>
 
 <div class="container">
@@ -74,24 +72,45 @@ written By : sumit kumar
     <div class="panel-heading">
       <h6 style="text-align:center;" class="panel-title">My Cart</h6>
     </div>
+
+
+    
     <table class="table table-hover table-bordered" id="dev-table">
       <thead>
         <tr>
+        
           <th>Name</th>
           <th>Image</th>
           <th>Price</th>
+          <th></th>
+          <th>Qty</th>
+          <th></th>
           <th>Description</th>
           <th>Action</th>
 
         </tr>
       </thead>
+
+      <tr>
+
+      {% comment %} <td>{{product_quantities}}</td> {% endcomment %}
       {% for p in products %}
       {% if p %}
-
-          <tr>
             <td> {{p.name}}</td>
             <td> <img src="{% static p.product_image.url %}" alt="Profile Pic" height="50px" width="50px" /></td>
             <td>$ {{p.price}}</td>
+            
+            <td><a href="{% url 'updation-add-from-cart' p.id  %}">add Qty</a></td>
+           <td>
+             {% for idq,qty in product_quantities.items %}
+            
+                  {% if p.id == idq %} 
+                  {{ qty }} 
+                  {% endif %}
+            {% endfor %}
+        </td>
+            <td><a href="{% url 'updation-dec-from-cart' p.id  %}">Dec Qty</a></td>
+
             <td>{{p.description}}</td>
 
             <td><a class="btn btn-danger btn-xs" href="{% url 'remove-from-cart' p.id  %}"><span class="glyphicon glyphicon-trash"></span></a></td>
@@ -113,7 +132,9 @@ written By : sumit kumar
 
 
 <br><br><br><br><br>
-<!--
-developed By : sumit kumar
--->
+
 {% endblock content %}
+
+<!--
+developed By : Anil kumar
+-->

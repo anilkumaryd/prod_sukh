@@ -316,6 +316,151 @@ def cart_view(request):
 
 
 
+
+from django.shortcuts import render, get_object_or_404
+from . import models
+from django.http import JsonResponse
+
+
+
+def updation_add_from_cart_view(request, pk):
+    # Get the product object based on the primary key (pk)
+    product = get_object_or_404(models.Product, id=pk)
+
+    # Initialize product quantities dictionary
+    product_quantities = {}
+    if 'product_quantities' in request.COOKIES:
+        product_quantities = {
+            int(k): int(v) for k, v in 
+            (item.split(':') for item in request.COOKIES['product_quantities'].split('|') if item)
+        }
+
+    # Increment the quantity of the current product or set it to 1 if not present
+    if pk in product_quantities:
+        product_quantities[pk] += 1
+    else:
+        product_quantities[pk] = 1
+
+    # Calculate the new total price based on the product quantities
+    total = 0
+    for prod_id, qty in product_quantities.items():
+        prod = models.Product.objects.get(id=prod_id)
+        total += prod.price * qty
+
+    # Fetch the products to display in the cart
+    product_ids = list(product_quantities.keys())
+    products = models.Product.objects.filter(id__in=product_ids)
+
+    # Prepare the response and pass product quantities to the template
+    response = render(request, 'ecom/cart.html', {
+        'products': products,
+        'total': total,
+        'product_count_in_cart': len(product_ids),
+        'product_quantities': product_quantities
+    })
+    
+    # Set the updated product quantities in cookies
+    product_quantities_cookie = '|'.join(f'{prod_id}:{qty}' for prod_id, qty in product_quantities.items())
+    response.set_cookie('product_quantities', product_quantities_cookie)
+
+    return response
+
+
+def updation_dec_from_cart_view(request, pk): 
+    # Get the product object based on the primary key (pk)
+    product = get_object_or_404(models.Product, id=pk)
+
+    # Initialize product quantities dictionary
+    product_quantities = {}
+    if 'product_quantities' in request.COOKIES:
+        product_quantities = {
+            int(k): int(v) for k, v in 
+            (item.split(':') for item in request.COOKIES['product_quantities'].split('|') if item)
+        }
+
+    # Decrease the quantity of the current product but ensure it's not below 1
+    if pk in product_quantities and product_quantities[pk] > 1:
+        product_quantities[pk] -= 1
+    elif pk not in product_quantities:
+        product_quantities[pk] = 1  # Set to 1 if it's not already in the cart
+
+    # Calculate the new total price based on the product quantities
+    total = 0
+    for prod_id, qty in product_quantities.items():
+        prod = models.Product.objects.get(id=prod_id)
+        total += prod.price * qty
+
+    # Fetch the products to display in the cart
+    product_ids = list(product_quantities.keys())
+    products = models.Product.objects.filter(id__in=product_ids)
+
+    # Prepare the response and pass product quantities to the template
+    response = render(request, 'ecom/cart.html', {
+        'products': products,
+        'total': total,
+        'product_count_in_cart': len(product_ids),
+        'product_quantities': product_quantities
+    })
+    
+    # Set the updated product quantities in cookies
+    product_quantities_cookie = '|'.join(f'{prod_id}:{qty}' for prod_id, qty in product_quantities.items())
+    response.set_cookie('product_quantities', product_quantities_cookie)
+
+    return response
+
+
+
+
+
+
+
+
+
+
+
+
+# def updation_from_cart_view(request, pk):
+#     products=None
+#     total=0
+#  ## my logic   
+#     obj_prod=models.Product.objects.get(id=pk)
+#     obj_all=models.Product.objects.values()
+#     lst=[]
+#     for data in obj_all:
+#         x=data['price']    
+#         x+=x
+#         total=total+x
+#         break 
+
+   
+#     if 'product_ids' in request.COOKIES:
+#         product_ids = request.COOKIES['product_ids']
+#         counter=product_ids.split('|')
+#         product_count_in_cart=len(set(counter))
+#     else:
+#         product_count_in_cart=0
+
+#     # fetching product details from db whose id is present in cookie
+#     # products=None
+#     # total=0
+#     if 'product_ids' in request.COOKIES:
+#         product_ids = request.COOKIES['product_ids']
+#         if product_ids != "":
+#             product_id_in_cart=product_ids.split('|')
+#             products=models.Product.objects.all().filter(id__in = product_id_in_cart)
+
+#             #for total price shown in cart
+#             for p in products:
+#                 total=total+p.price
+#     return render(request,'ecom/cart.html',{'products':products,'total':total,'product_count_in_cart':product_count_in_cart})
+
+
+
+
+
+
+
+
 def remove_from_cart_view(request, pk):
     # Check for product IDs in cookies
     if 'product_ids' in request.COOKIES:
@@ -358,6 +503,58 @@ def remove_from_cart_view(request, pk):
     #     'total': 0,
     #     'product_count_in_cart': 0
     # }) 
+
+
+
+
+
+
+def remove_from_cart_view(request, pk):
+    # Check for product IDs in cookies
+    if 'product_ids' in request.COOKIES:
+        product_ids = request.COOKIES['product_ids']
+        product_id_in_cart = product_ids.split('|')
+        product_id_in_cart = list(set(product_id_in_cart))
+
+        # Check if the product ID to remove is in the cart
+        if str(pk) in product_id_in_cart:
+            product_id_in_cart.remove(str(pk))
+
+        # Fetch products that are still in the cart
+        products = models.Product.objects.filter(id__in=product_id_in_cart)
+
+        # Calculate total price after removing the product
+        total = sum(p.price for p in products)
+
+        # Update the cookie value
+        value = '|'.join(product_id_in_cart)
+        response = render(request, 'ecom/cart.html', {
+            'products': products,
+            'total': total,
+            'product_count_in_cart': len(set(product_id_in_cart))
+        })
+        if not value:
+            response.delete_cookie('product_ids')
+         
+        
+        else:
+            response.set_cookie('product_ids', value)
+           
+            
+
+        return response
+    
+    # Handle the case where the cookie is not found
+    return redirect('/')
+    # return render(request, 'ecom/cart.html', {
+    #     'products': [],
+    #     'total': 0,
+    #     'product_count_in_cart': 0
+    # }) 
+
+
+
+    
 
 
 
