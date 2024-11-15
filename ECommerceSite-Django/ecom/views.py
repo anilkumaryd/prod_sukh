@@ -6,6 +6,7 @@ from django.contrib.auth.models import Group
 from django.contrib.auth.decorators import login_required,user_passes_test
 from django.contrib import messages
 from django.conf import settings
+from django.core.mail import send_mail
 
 def home_view(request):
     products=models.Product.objects.all()
@@ -413,6 +414,16 @@ def customer_address_view(request):
             # here we are taking address, email, mobile at time of order placement
             # we are not taking it from customer account table because
             # these thing can be changes
+
+            # subject = 'Your Order has been Placed : Team Eshop'
+            # message =   "Thanks to Shop With Us\nYou Has has been placed\nNow You Can Tract Your Orders in Profile Page\nTeam Eshop"
+            # email_from = settings.EMAIL_HOST_USER
+            # recipient_list = [addressForm.cleaned_data['Email'], ]
+            # send_mail( subject, message, email_from, recipient_list )
+
+
+
+
             email = addressForm.cleaned_data['Email']
             mobile=addressForm.cleaned_data['Mobile']
             address = addressForm.cleaned_data['Address']
@@ -458,8 +469,18 @@ def payment_success_view(request):
             # Here we get products list that will be ordered by one customer at a time
 
     # these things can be change so accessing at the time of order...
+    
+   
+
+
+
     if 'email' in request.COOKIES:
-        email=request.COOKIES['email']
+            email=request.COOKIES['email']
+            subject = 'Your Order has been Placed : Team Sukhianna'
+            message =   "Thanks to Shop With Us\nYou Has has been placed\nNow You Can Tract Your Orders in Profile Page\nTeam Sukhianna"
+            email_from = settings.EMAIL_HOST_USER
+            recipient_list = [request.COOKIES['email'], ]
+            send_mail( subject, message, email_from, recipient_list )
     if 'mobile' in request.COOKIES:
         mobile=request.COOKIES['mobile']
     if 'address' in request.COOKIES:
